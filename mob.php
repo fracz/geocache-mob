@@ -188,7 +188,7 @@ function coordsToDec($latLng)
                     <button type="button" class="button is-large is-primary mt-3" id="submitbutton">
                         I'm here!
                     </button>
-                    <p class="is-help is-danger" v-if="disallowed">
+                    <p class="help is-danger" v-if="disallowed">
                         You have to enable location discovery in order to take part in the MOB.
                     </p>
                 </div>
