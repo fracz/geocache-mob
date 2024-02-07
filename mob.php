@@ -388,11 +388,14 @@ function coordsToDec($latLng)
                     .finally(() => this.fetching = false);
             },
             formatCoord(coord, lat = true) {
-                const dir = lat ? (coord.deg < 0 ? 'S' : 'N') : (coord.deg < 0 ? 'W' : 'E');
+                const dir = lat ? (coord.minus ? 'S' : 'N') : (coord.minus ? 'W' : 'E');
                 return `${dir} ${zeroPad(coord.deg, lat ? 2 : 3)}° ${zeroPad(coord.min, 2)}.${zeroPad(Math.round(coord.minDec), 3)}'`;
             },
             coordsDecToDdm(coord) {
+                const minus = coord < 0;
+                coord = Math.abs(coord);
                 return {
+                    minus,
                     deg: Math.floor(coord),
                     min: Math.abs(Math.floor((coord % 1) * 60)),
                     minDec: Math.abs(Math.round((((coord % 1) * 60) % 1) * 1000)),
