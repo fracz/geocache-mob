@@ -36,10 +36,13 @@ if ($isPost) {
         $mobCache['radius'] = max(10, min(intval($mobCache['radius'] ?? 50), 150));
         $mobCache['minAttendees'] = max(1, min(intval($mobCache['minAttendees'] ?? 5), 20));
         $mobCache['finalCoords'] = trim($mobCache['finalCoords'] ?? '');
-        if (!$mobCache['finalCoords'] || !preg_match('#^[NS] \d\d° [0-5]\d.\d\d\d [EW] [01]\d\d° [0-5]\d.\d\d\d$#', $mobCache['finalCoords'])) {
-            $errors['finalCoords'] = 'Invalid coordinates.';
+        if ($mobCache['finalCoords'] && !preg_match('#^[NS] \d\d° [0-5]\d.\d\d\d [EW] [01]\d\d° [0-5]\d.\d\d\d$#', $mobCache['finalCoords'])) {
+            $errors['finalCoords'] = 'Invalid final coordinates.';
         }
         $mobCache['finalHint'] = substr(trim($mobCache['finalHint'] ?? ''), 0, 250);
+        if (!$mobCache['finalHint'] && !$mobCache['finalCoords']) {
+            $errors['finalCoords'] = 'You need to specify final coordinates and/or a hint.';
+        }
 
         if (!$errors) {
             try {
@@ -292,7 +295,7 @@ if ($isPost) {
                             </p>
                         </div>
                         <div class="field">
-                            <label class="label">Final hint (optional)</label>
+                            <label class="label">Final hint</label>
                             <div class="control">
                             <textarea class="textarea" name="finalHint"
                                       v-model="mobCache.finalHint" maxlength="250"

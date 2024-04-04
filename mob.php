@@ -189,7 +189,7 @@ function coordsToDec($latLng)
                         I'm here!
                     </button>
                     <p class="help is-danger" v-if="disallowed">
-                        You have to enable location discovery in order to take part in the MOB.
+                        You have to enable location discovery in order to take part in the MOB. Try refreshing the page.
                     </p>
                 </div>
                 <div v-else>
@@ -211,7 +211,12 @@ function coordsToDec($latLng)
                                     </p>
                                     <p class="is-size-5">waiting for others...</p>
                                 </div>
-                                <p class="is-size-3 has-text-danger" v-else>You are too far away!</p>
+                                <div v-else>
+                                    <p class="is-size-3 has-text-danger">You are too far away!</p>
+                                    <p>Please move around and try refreshing the page.</p>
+                                    <p>If you are in the right spot but the app does not get it, opening your map
+                                        application and trying again helps.</p>
+                                </div>
                             </div>
                         </div>
                         <div class="is-flex is-align-items-center is-justify-content-center mt-3"
@@ -246,8 +251,10 @@ function coordsToDec($latLng)
                         <article class="message is-success mt-5">
                             <div class="message-header"><p>Yay! You did it!</p></div>
                             <div class="message-body">
-                                <h2 class="is-size-4">The final coordinates are:</h2>
-                                <h2 class="is-size-2">{{ finalCoords }}</h2>
+                                <div v-if="finalCoords">
+                                    <h2 class="is-size-4">The final coordinates are:</h2>
+                                    <h2 class="is-size-2">{{ finalCoords }}</h2>
+                                </div>
                                 <div v-if="finalHint">
                                     <p class="is-size-3" style="white-space: pre-line">
                                         {{ finalHint }}

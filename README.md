@@ -47,7 +47,7 @@ CREATE TABLE `mob_cache`
     `coords`        varchar(50) NOT NULL,
     `radius`        int(11) NOT NULL DEFAULT 50,
     `min_attendees` int(11) NOT NULL DEFAULT 5,
-    `final_coords`  varchar(50) NOT NULL,
+    `final_coords`  varchar(50) DEFAULT NULL,
     `final_hint`    varchar(255)         DEFAULT NULL,
     `authcode`      char(40)    NOT NULL,
     `created_at`    datetime    NOT NULL DEFAULT current_timestamp(),
