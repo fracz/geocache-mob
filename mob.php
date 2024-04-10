@@ -192,8 +192,14 @@ function coordsToDec($latLng)
                         You have to enable location discovery in order to take part in the MOB. Try refreshing the page.
                     </p>
                 </div>
+                <div v-else-if="fetching" class="is-flex is-align-items-center is-justify-content-center mt-3">
+                    <div class="is-flex is-align-items-center is-justify-content-center has-background-grey"
+                         style="height: 130px; width: 130px; border-radius: 50%">
+                        <span class="loadereye"></span>
+                    </div>
+                </div>
                 <div v-else>
-                    <div v-if="!finalCoords">
+                    <div v-if="!finalCoords && !finalHint">
                         <h2 class="is-size-3">Your location is</h2>
                         <p class="is-size-2">{{ formatCoords(coords) }}</p>
                         <div v-if="response">
@@ -256,9 +262,7 @@ function coordsToDec($latLng)
                                     <h2 class="is-size-2">{{ finalCoords }}</h2>
                                 </div>
                                 <div v-if="finalHint">
-                                    <p class="is-size-3" style="white-space: pre-line">
-                                        {{ finalHint }}
-                                    </p>
+                                    <p class="is-size-3" style="white-space: pre-line">{{ finalHint }}</p>
                                 </div>
                             </div>
                         </article>
@@ -330,7 +334,7 @@ function coordsToDec($latLng)
                             body: JSON.stringify({action: 'reveal'})
                         }).then((response) => response.json())
                             .then(r => {
-                                if (r.finalCoords) {
+                                if (r.finalCoords || r.finalHint) {
                                     this.revealing = false;
                                     this.finalCoords = r.finalCoords;
                                     this.finalHint = r.finalHint;
@@ -341,7 +345,8 @@ function coordsToDec($latLng)
                                     this.count = r.count;
                                     this.missing = r.missing;
                                 }
-                            });
+                            })
+                            .finally(() => this.fetching = false);
                     }
                     this.timeout -= 1;
                 }
@@ -389,10 +394,11 @@ function coordsToDec($latLng)
                                 this.timeoutMax = body.delayS;
                                 this.timeout = body.delayS;
                                 this.revealing = true;
+                            } else {
+                                this.fetching = false;
                             }
                         }
-                    })
-                    .finally(() => this.fetching = false);
+                    });
             },
             formatCoord(coord, lat = true) {
                 const dir = lat ? (coord.minus ? 'S' : 'N') : (coord.minus ? 'W' : 'E');
